@@ -1,0 +1,479 @@
+<style>
+
+:root{
+
+  --paper:#f4f1ea;
+  --paper-dark:#e8e1d3;
+  --sepia:#d7c8aa;
+  --charcoal:#2f2f2f;
+  --gold:#b99b5f;
+
+}
+
+body{
+
+  margin:0;
+
+  font-family:
+    "Georgia",
+    "Times New Roman",
+    serif;
+
+  color:var(--charcoal);
+
+  background:#f4f1ea;
+
+}
+
+/* Fondo institucional */
+
+#background{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:-1;
+
+  background-image:url('https://i.postimg.cc/1tryzQRC/1736348763865.jpg');
+
+  background-size:cover;
+
+  background-position:center;
+
+  filter:
+    grayscale(100%)
+    blur(4px);
+
+  opacity:.20;
+
+}
+
+/* Encabezado */
+
+header{
+
+  text-align:center;
+
+  padding:25px 10px 15px;
+
+}
+
+header h1{
+
+  display:inline-block;
+
+  margin:0;
+
+  padding:12px 40px;
+
+  border:2px solid var(--gold);
+
+  border-radius:999px;
+
+  background:
+    rgba(255,255,255,.75);
+
+  font-size:42px;
+
+  letter-spacing:4px;
+
+  font-weight:normal;
+
+  color:var(--charcoal);
+
+}
+
+header span{
+
+  display:block;
+
+  margin-top:12px;
+
+  font-size:14px;
+
+  letter-spacing:2px;
+
+  text-transform:uppercase;
+
+}
+
+.logo{
+
+  width:250px;
+  max-width:95%;
+  height:auto;
+
+  border-radius:15px;
+
+  border:1px solid rgba(185,155,95,.4);
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.12);
+
+}
+
+/* Menú */
+
+nav{
+
+  text-align:center;
+
+  margin-bottom:20px;
+
+}
+
+nav button{
+
+  background:#6b5840;
+
+  color:white;
+
+  border:none;
+
+  border-radius:10px;
+
+  padding:12px 22px;
+
+  margin:0 4px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.25);
+
+}
+
+nav button:hover{
+
+  transform:
+    translateY(-1px);
+
+  background:#b99b5f;
+
+  color:white;
+
+}
+
+.dropdown{
+
+  position:relative;
+
+  display:inline-block;
+
+}
+
+.menu-button{
+
+  background:#6b5840;
+
+  color:white;
+
+}
+
+.dropdown-content{
+
+  display:none;
+
+  position:absolute;
+
+  min-width:220px;
+
+  background:
+    rgba(255,255,255,.97);
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.25);
+
+  z-index:1000;
+
+  text-align:left;
+
+}
+
+.dropdown-content a{
+
+  display:block;
+
+  padding:12px 16px;
+
+  text-decoration:none;
+
+  color:#333;
+
+}
+
+.dropdown-content a:hover{
+
+  background:#f2ede2;
+
+}
+
+.menu-title{
+
+  padding:10px 16px;
+
+  background:#e8e1d3;
+
+  color:#6b5840;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+
+}
+
+.dropdown:hover .dropdown-content{
+
+  display:block;
+
+}
+
+/* Contenido */
+
+#content{
+
+  max-width:1200px;
+
+  margin:auto;
+
+  padding:20px;
+
+}
+
+/* Toolbar */
+
+.toolbar{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:15px;
+
+}
+
+.primary{
+
+  background:#b99b5f;
+
+  color:white;
+
+  border:none;
+
+  border-radius:8px;
+
+  padding:10px 18px;
+
+}
+
+/* Tabla */
+
+.grid{
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  background:
+    rgba(255,255,255,.85);
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.15);
+
+}
+
+.grid th{
+
+  background:#e8e1d3;
+
+  text-align:left;
+
+  padding:12px;
+
+}
+
+.grid td{
+
+  padding:10px;
+
+  border-top:
+    1px solid #ddd;
+
+}
+
+.grid tr:hover{
+
+  background:
+    rgba(215,200,170,.25);
+
+}
+
+/* Modal */
+
+.modal{
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:
+    rgba(0,0,0,.55);
+
+}
+
+.modal-content{
+
+  background:#fdfcf9;
+
+  width:720px;
+
+  max-width:95%;
+
+  margin:40px auto;
+
+  padding:25px;
+
+  border-radius:15px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35);
+
+}
+
+.modal-content h2{
+
+  margin-top:0;
+
+}
+
+/* Formulario */
+
+.form-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:15px;
+
+}
+
+.full-width{
+
+  grid-column:
+    1 / span 2;
+
+}
+
+.modal-content label{
+
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:13px;
+
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea{
+
+width:100%;
+
+box-sizing:border-box;
+
+border:none;
+
+border-radius:8px;
+
+padding:10px;
+
+background:white;
+
+box-shadow:
+inset 0 0 0 1px #ddd;
+
+}
+
+.modal-content textarea{
+
+resize:vertical;
+
+min-height:90px;
+
+}
+
+.modal-buttons{
+
+  margin-top:20px;
+
+  text-align:right;
+
+}
+
+.modal-buttons button{
+
+  margin-left:10px;
+
+  border:none;
+
+  border-radius:8px;
+
+  padding:10px 18px;
+
+}
+
+@media(max-width:700px){
+
+  .form-grid{
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+  .full-width{
+
+    grid-column:auto;
+
+  }
+
+}
+
+footer{
+
+  position:fixed;
+
+  left:12px;
+  bottom:8px;
+
+  font-size:10px;
+
+  color:#666;
+
+  opacity:.40;
+
+  font-style:italic;
+
+}
+
+</style>

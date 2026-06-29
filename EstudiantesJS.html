@@ -1,0 +1,774 @@
+<script>
+
+  /*   0004   */
+
+let carreras = [];
+
+let estudiantes = [];
+
+let currentSortField =
+'apellido';
+
+let currentSortAsc =
+true;
+
+function LoadStudents(){
+
+  google.script.run
+    .withSuccessHandler(
+      RenderStudents
+    )
+    .GetEstudiantes();
+
+}
+
+function RenderStudents(rows){
+
+  estudiantes = rows;
+
+  let html = `
+
+    <div class="toolbar">
+
+  <h2>
+    Estudiantes (${rows.length})
+  </h2>
+
+  <div>
+
+    <input
+      id="searchBox"
+      type="text"
+      placeholder="🔍 Buscar..."
+      onkeyup="FilterStudents()"
+      style="
+        width:220px;
+        padding:8px;
+        border-radius:8px;
+        border:1px solid #ccc;
+        margin-right:10px;
+      ">
+
+    <button
+        class="primary"
+        onclick="NewStudent()">
+
+        + Nuevo
+
+      </button>
+
+    </div>
+
+  `;
+
+  html += `
+
+    <table class="grid">
+
+      <tr>
+
+        <th>Apellido</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Carrera</th>
+        <th>Acciones</th>
+
+      </tr>
+
+  `;
+
+  rows.forEach(r=>{
+
+    html += `
+
+      <tr>
+
+        <td>${r.apellido || ''}</td>
+
+        <td>${r.nombre || ''}</td>
+
+        <td>${r.dni || ''}</td>
+
+        <td>
+          ${
+            r.carreras
+              ? r.carreras.nombre
+              : ''
+          }
+        </td>
+
+        <td>
+
+          <button
+            title="Editar"
+            onclick="EditStudent(${r.id})">
+
+            ✏️
+
+          </button>
+
+          <button
+            title="Eliminar"
+            onclick="DeleteStudent(${r.id})">
+
+            🗑️
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+  html += '</table>';
+
+  document
+    .getElementById(
+      'content'
+    )
+    .innerHTML = html;
+
+}
+
+function FilterStudents(){
+
+  const text =
+
+    document
+      .getElementById(
+        'searchBox'
+      )
+      .value
+      .toLowerCase();
+
+  const filtered =
+
+    estudiantes.filter(r =>
+
+      (r.apellido || '')
+        .toLowerCase()
+        .includes(text)
+
+      ||
+
+      (r.nombre || '')
+        .toLowerCase()
+        .includes(text)
+
+      ||
+
+      (r.dni || '')
+        .toLowerCase()
+        .includes(text)
+
+      ||
+
+      (r.email || '')
+        .toLowerCase()
+        .includes(text)
+
+    );
+
+  DrawRows(filtered);
+
+}
+
+function DrawRows(rows){
+
+  let html = `
+
+    <table class="grid">
+
+      <tr>
+
+        <th>Apellido</th>
+        <th>Nombre</th>
+        <th>DNI</th>
+        <th>Carrera</th>
+        <th>Acciones</th>
+
+      </tr>
+
+  `;
+
+  rows.forEach(r=>{
+
+    html += `
+
+      <tr>
+
+        <td>${r.apellido || ''}</td>
+
+        <td>${r.nombre || ''}</td>
+
+        <td>${r.dni || ''}</td>
+
+        <td>
+          ${
+            r.carreras
+              ? r.carreras.nombre
+              : ''
+          }
+        </td>
+
+        <td>
+
+          <button
+            title="Editar"
+            onclick="EditStudent(${r.id})">
+
+            ✏️
+
+          </button>
+
+          <button
+            title="Eliminar"
+            onclick="DeleteStudent(${r.id})">
+
+            🗑️
+
+          </button>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+  html += '</table>';
+
+  document
+    .querySelector(
+      '#content table'
+    )
+    .outerHTML =
+      html;
+
+}
+
+  
+function NewStudent(){
+
+  document
+    .getElementById(
+      'studentId'
+    ).value='';
+
+  document
+    .getElementById(
+      'modalTitle'
+    ).innerText=
+      'Nuevo Estudiante';
+
+  ClearForm();
+
+  LoadCarreras(
+    ShowModal
+  );
+
+}
+
+function ShowModal(){
+
+  document
+    .getElementById(
+      'studentModal'
+    )
+    .style.display='block';
+
+}
+
+function CloseModal(){
+
+  document
+    .getElementById(
+      'studentModal'
+    )
+    .style.display='none';
+
+}
+
+function LoadCarreras(callback){
+
+  google.script.run
+    .withSuccessHandler(
+      function(data){
+
+        carreras=data;
+
+        const combo =
+          document
+            .getElementById(
+              'carrera_id'
+            );
+
+        combo.innerHTML='';
+
+        data.forEach(c=>{
+
+          combo.innerHTML +=
+
+          `<option
+             value="${c.id}">
+             ${c.nombre}
+           </option>`;
+
+        });
+
+        if(callback){
+          callback();
+        }
+
+      })
+    .GetCarreras();
+
+}
+
+function ClearForm(){
+
+  [
+    'apellido',
+    'nombre',
+    'dni',
+    'email',
+    'telefono',
+    'legajo',
+    'observaciones',
+    'fecha_nacimiento'
+  ]
+  .forEach(id=>{
+
+    document
+      .getElementById(id)
+      .value='';
+
+  });
+
+}
+
+function ProperCase(text){
+
+  if(!text) return '';
+
+  return text
+    .toLowerCase()
+    .replace(
+      /\b\w/g,
+      c => c.toUpperCase()
+    );
+
+}
+
+function EditStudent(id){
+
+  google.script.run
+    .withSuccessHandler(
+      function(data){
+
+        document
+          .getElementById(
+            'studentId'
+          )
+          .value =
+            data.id;
+
+        document
+          .getElementById(
+            'apellido'
+          )
+          .value =
+            data.apellido || '';
+
+        document
+          .getElementById(
+            'nombre'
+          )
+          .value =
+            data.nombre || '';
+
+        document
+          .getElementById(
+            'dni'
+          )
+          .value =
+            data.dni || '';
+
+        document
+          .getElementById(
+            'email'
+          )
+          .value =
+            data.email || '';
+
+        document
+          .getElementById(
+            'telefono'
+          )
+          .value =
+            data.telefono || '';
+
+        document
+          .getElementById(
+            'legajo'
+          )
+          .value =
+            data.legajo || '';
+
+        document
+          .getElementById(
+            'observaciones'
+          )
+          .value =
+            data.observaciones || '';
+
+        document
+          .getElementById(
+            'fecha_nacimiento'
+          )
+          .value =
+            data.fecha_nacimiento || '';
+
+        LoadCarreras(function(){
+
+          document
+            .getElementById(
+              'carrera_id'
+            )
+            .value =
+              data.carrera_id;
+
+          ShowModal();
+
+        });
+
+      })
+    .GetEstudiante(id);
+
+}
+
+
+function SaveStudent(){
+
+  const id =
+    document
+      .getElementById(
+        'studentId'
+      )
+      .value;
+
+  const data = {
+
+    apellido:
+      ProperCase(
+        document
+          .getElementById(
+            'apellido'
+          )
+          .value
+      ),
+
+    nombre:
+      ProperCase(
+        document
+          .getElementById(
+            'nombre'
+          )
+          .value
+      ),
+
+    dni:
+      document
+        .getElementById(
+          'dni'
+        )
+        .value,
+
+    email:
+      document
+        .getElementById(
+          'email'
+        )
+        .value,
+
+    telefono:
+      document
+        .getElementById(
+          'telefono'
+        )
+        .value || null,
+
+    legajo:
+      document
+        .getElementById(
+          'legajo'
+        )
+        .value || null,
+
+    observaciones:
+      document
+        .getElementById(
+          'observaciones'
+        )
+      .value || null,
+
+    fecha_nacimiento:
+      document
+        .getElementById(
+          'fecha_nacimiento'
+        )
+        .value || null,
+
+    carrera_id:
+      Number(
+        document
+          .getElementById(
+            'carrera_id'
+          )
+          .value
+      )
+
+  };
+
+  if(id){
+
+    google.script.run
+      .withSuccessHandler(
+        function(){
+
+          CloseModal();
+
+          LoadStudents();
+
+        })
+      .UpdateEstudiante(
+        Number(id),
+        data
+      );
+
+  }
+  else{
+
+    google.script.run
+      .withSuccessHandler(
+        function(){
+
+          CloseModal();
+
+          LoadStudents();
+
+        })
+      .InsertEstudiante(
+        data
+      );
+
+  }
+
+}
+
+function ShowMenu(menu){
+
+  let html = '';
+
+  switch(menu){
+
+    case 'archivos':
+
+      html = `
+
+        <button onclick="LoadStudents()">
+          Alumnos
+        </button>
+
+        <span style="
+          margin:0 15px;
+          color:#888;
+          font-weight:bold;
+        ">
+          SEGURIDAD
+        </span>
+
+        <button
+          onclick="UnderConstruction('Usuarios')">
+          Usuarios
+        </button>
+
+        <button
+          onclick="UnderConstruction('Roles')">
+          Roles
+        </button>
+
+        <button
+          onclick="UnderConstruction('Permisos')">
+          Permisos
+        </button>
+
+        <button
+          onclick="UnderConstruction('Auditoría')">
+          Auditoría
+        </button>
+
+      `;
+
+      break;
+
+    case 'gestion':
+
+      html = `
+
+        <button
+          onclick="UnderConstruction('Inscripciones')">
+          Inscripciones
+        </button>
+
+        <button
+          onclick="UnderConstruction('Exámenes')">
+          Exámenes
+        </button>
+
+        <button
+          onclick="UnderConstruction('Credenciales')">
+          Credenciales
+        </button>
+
+        <button
+          onclick="UnderConstruction('Reportes')">
+          Reportes
+        </button>
+
+      `;
+
+      break;
+
+    case 'configuracion':
+
+      html = `
+
+        <button
+          onclick="UnderConstruction('Parámetros')">
+          Parámetros
+        </button>
+
+        <button
+          onclick="UnderConstruction('Sistema')">
+          Sistema
+        </button>
+
+      `;
+
+      break;
+
+  }
+
+  document
+    .getElementById(
+      'submenu'
+    )
+    .innerHTML = html;
+
+}
+
+
+function ExitApp(){
+
+  document.getElementById(
+    'content'
+  ).innerHTML = `
+
+    <div
+      style="
+        text-align:center;
+        padding-top:80px;
+      ">
+
+      <h2>
+        Gracias por utilizar
+        Vniversitas
+      </h2>
+
+      <p>
+        Sistema de Gestión Académica
+      </p>
+
+      <br>
+
+      <p>
+        Ya puede cerrar esta pestaña.
+      </p>
+
+      <br><br>
+
+      <small>
+        Developed by
+        JDE & ChatGPT
+      </small>
+
+    </div>
+
+  `;
+
+}
+
+function UnderConstruction(
+  module
+){
+
+  document.getElementById(
+    'content'
+  ).innerHTML = `
+
+    <div
+      style="
+        text-align:center;
+        padding-top:80px;
+      ">
+
+      <h2>
+        ${module}
+      </h2>
+
+      <p>
+        Este módulo se encuentra
+        actualmente en construcción.
+      </p>
+
+      <br>
+
+      <p>
+        Próximamente disponible.
+      </p>
+
+    </div>
+
+  `;
+
+    }
+
+function DeleteStudent(id){
+
+  if(
+    !confirm(
+      '¿Eliminar estudiante?'
+    )
+  ){
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(
+      function(){
+
+        LoadStudents();
+
+      })
+    .DeleteEstudiante(id);
+
+}
+
+
+
+</script>

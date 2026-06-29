@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>  
+    <base target="_top">  <?!= Include('Styles'); ?>    </head>
+  <body>  
+    <div id="background"></div>
+    
+    <nav>
+
+  <div class="dropdown">
+
+    <button class="menu-button">
+      Archivos ▼
+    </button>
+
+    <div class="dropdown-content">
+
+      <a href="javascript:void(0);" onclick="LoadStudents(); return false;">
+      Alumnos
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Docentes')">
+        Docentes
+      </a>
+
+      <div class="menu-title">
+        SEGURIDAD
+      </div>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Usuarios')">
+        Usuarios
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Roles')">
+        Roles
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Permisos')">
+        Permisos
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Auditoría')">
+        Auditoría
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="dropdown">
+
+    <button class="menu-button">
+      Gestión ▼
+    </button>
+
+    <div class="dropdown-content">
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Inscripciones')">
+         Inscripciones
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Exámenes')">
+         Exámenes
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Credenciales')">
+         Credenciales
+      </a>
+
+      <a href="javascript:void(0);"
+         onclick="UnderConstruction('Reportes')">
+         Reportes
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="dropdown">
+
+    <button class="menu-button">
+      Configuración ▼
+    </button>
+
+    <div class="dropdown-content">
+
+      <a href="#"
+         onclick="UnderConstruction('Parámetros')">
+         Parámetros
+      </a>
+
+      <a href="#"
+         onclick="UnderConstruction('Sistema')">
+         Sistema
+      </a>
+
+    </div>
+
+  </div>
+
+  <button onclick="UnderConstruction('Ayuda')">
+    Ayuda
+  </button>
+
+  <button onclick="ExitApp()">
+    Salir
+  </button>
+
+</nav>
+    
+    
+
+
+    
+
+    <header>
+      <img src="https://i.postimg.cc/1XWPprq6/Vniversitas-logo-1.png" class="logo">
+    </header>
+    
+    <main id="content">Bienvenido a Vniversitas
+
+  </main>  
+  <?!= Include('EstudiantesJS'); ?>
+  <?!= Include('EstudiantesUI'); ?>
+  <footer>
+
+  Developed by
+  JDE & ChatGPT
+
+  </footer>
+</body>
+</html>
